@@ -8,8 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [20, 22]
-        python-version: ['3.9', '3.10']
+        include:
+          - node: 20
+            python: '3.9'
+          - node: 22
+            python: '3.10'
+    name: Test on Node ${{ matrix.node }} + Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,7 +24,7 @@ jobs:
         run: yarn --frozen-lockfile
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python }}
           cache: pip
       - name: pip> Install dependencies
         run: pip install -r requirements.txt
