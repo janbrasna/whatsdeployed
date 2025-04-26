@@ -20,11 +20,12 @@ COPY ./package.json /app/package.json
 COPY ./yarn.lock /app/yarn.lock
 
 RUN pip install -U 'pip>=8' && \
-    pip install --no-cache-dir -r requirements.txt --progress-bar off && \
+    pip install --no-cache-dir -r requirements.txt && \
     yarn install --non-interactive
 
-# Install the app
+# Install the app and prepare implicit Flask instance
 COPY . /app/
+RUN mkdir /app/instance && chown app:app /app/instance/
 RUN yarn build
 
 # Set Python-related environment variables to reduce annoying-ness
